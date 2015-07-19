@@ -1,10 +1,20 @@
-SYMBOLS = '!@#$%&*'.split('')
+SYMBOLS = '@#$%&*'.split('')
+REGEXP = (item)-> new RegExp('.+(' + item + ').+')
+
+disguisedWord = (text)->
+  disguised = ''
+  i = 0
+  while i < text.length
+    disguised += SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)]
+    i++
+
+  return disguised
 
 parse = (text, list)->
-  list.forEach (item)->
-    if new RegExp(item).test(text)
-      # return text.replace(new RegExp('@'), SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)])
-      return 'palavrão'
+  for n of list
+    if text.match REGEXP(list[n])
+      textWithDisguisedWord = text.replace(list[n], disguisedWord(text))
+      return textWithDisguisedWord
 
   return text
 
