@@ -1,19 +1,22 @@
+_ = require 'underscore'
+
 SYMBOLS = '@#$%&*'.split('')
 REGEXP = (item)-> new RegExp('.+(' + item + ').+')
 
 disguisedWord = (text)->
-  disguised = ''
-  i = 0
-  while i < text.length
-    disguised += SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)]
-    i++
+  disguised = []
 
-  return disguised
+  _(text.length).times ->
+    disguised.push _.sample(SYMBOLS)
+
+  disguised.join('')
 
 parse = (text, list)->
   for n of list
     if text.match REGEXP(list[n])
-      textWithDisguisedWord = text.replace(list[n], disguisedWord(text))
+      textWithDisguisedWord =
+        text.replace(list[n], disguisedWord(text.match(REGEXP(list[n]))[1]))
+
       return textWithDisguisedWord
 
   return text
